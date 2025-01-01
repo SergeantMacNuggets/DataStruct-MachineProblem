@@ -27,6 +27,15 @@ Building *createBuilding(char x) {
     return newBuild;
 }
 
+Building *peek(Node *n) {
+    if(n == NULL) return NULL;
+    return n->hut;
+}
+
+int peekToll(Node *n) {
+    if(n==NULL) return -1;
+    return n->toll;
+}
 
 void push(Node **n, Building *b, int x) {
     Node *head = *n;
