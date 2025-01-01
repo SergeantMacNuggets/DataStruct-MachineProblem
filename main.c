@@ -2,13 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "queue.h"
-
-typedef struct building {
-    char type;
-    int toll;
-    struct building *next;
-}Building;
+#include "pQueue.h"
 
 typedef struct list {
     Building *head;
@@ -18,16 +12,8 @@ typedef struct list {
 List **createRoadMap(int roads);
 
 void addNode(List *newList[],int s, int d, char *table);
-void pathing(List **roadMap, int item, char src, char dst);
+int pathing(List **roadMap, int item, char src, char dst);
 
-
-Building *createBuilding(char x) {
-    Building *newBuild = (Building*) malloc(sizeof(Building));
-    newBuild->type = x;
-    newBuild->toll = 1;
-    newBuild->next = NULL;
-    return newBuild;
-}
 
 void display(List *newList[],int roads);
 
@@ -93,3 +79,9 @@ List **createRoadMap(int roads) {
     }
     return newList;
 }
+
+// Building *findNode()
+
+// int pathing(List **roadMap, int item, char src, char dst) {
+
+// }
