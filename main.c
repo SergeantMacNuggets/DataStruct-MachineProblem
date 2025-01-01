@@ -1,46 +1,42 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
+#include "queue.h"
 
 typedef struct building {
     char type;
     int toll;
-    // int vertexNum;
     struct building *next;
 }Building;
 
 typedef struct list {
     Building *head;
-    struct list *next;
 }List;
 
 
 List **createRoadMap(int roads);
 
 void addNode(List *newList[],int s, int d, char *table);
+void pathing(List **roadMap, int item, char src, char dst);
+
 
 Building *createBuilding(char x) {
     Building *newBuild = (Building*) malloc(sizeof(Building));
     newBuild->type = x;
+    newBuild->toll = 1;
     newBuild->next = NULL;
     return newBuild;
 }
 
-void display(List *newList[]);
+void display(List *newList[],int roads);
 
 int main() {
     int input;
     printf("Number of Roads: ");
     scanf("%d",&input);
     List **firstMap = createRoadMap(input);
-    display(firstMap);
-    // while(1) {
-    //     printf("Number of Roads: ");
-    //     scanf("%d",&input);
-    //     // if(input == -1)break;
-    //     createRoadMap(input);
-    //     break;
-    // }
+    display(firstMap,input);
     return 0;
 }
 
@@ -56,9 +52,9 @@ void addNode(List *newList[], int s, int d, char *table) {
     tmp->next=dest;
 }
 
-void display(List *newList[]) {
+void display(List **newList,int roads) {
     Building *ptr2;
-    for(int i=0;i<5;i++) {
+    for(int i=0;i<roads;i++) {
         ptr2=newList[i]->head;
         while(ptr2!=NULL) {
             printf("%c -> ",ptr2->type);
@@ -95,6 +91,5 @@ List **createRoadMap(int roads) {
         }
         addNode(newList,indexNum(charTable,input[0]),indexNum(charTable,input[2]),charTable);
     }
-    // fgets(input,sizeof(input),stdin);
     return newList;
 }
