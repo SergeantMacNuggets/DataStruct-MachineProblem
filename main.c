@@ -3,6 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 #include "pQueue.h"
+#include "queue.h"
 
 typedef struct list {
     Building *head;
@@ -23,7 +24,8 @@ int main() {
     scanf("%d",&input);
     List **firstMap = createRoadMap(input);
     display(firstMap);
-    pathing(firstMap,66,'E','S');
+    printf("Reach\n");
+    pathing(firstMap,39,'A','X');
     return 0;
 }
 
@@ -84,6 +86,7 @@ List **createRoadMap(int roads) {
     }
     for(int i=0;i<roads;i++) {
         addNode(newList,indexNum(charTable,totalInput[i][0]),indexNum(charTable,totalInput[i][2]),charTable);
+        addNode(newList,indexNum(charTable,totalInput[i][2]),indexNum(charTable,totalInput[i][0]),charTable);
     }
     len=strlen(charTable);
     return newList;
@@ -107,11 +110,13 @@ int tollCost(char c, int item) {
     return item+1;
 }
 
-void pushAll(Building *list,Node **pQ,int item) {
+void pushAll(Building *list,Node **pQ,int item,Queue *q) {
     Building *ptr = list->next;
     Node *p = *pQ;
     while(ptr!=NULL) {
-        push(&p,ptr,tollCost(ptr->type,item));
+        printf("Reach2\n");
+        if(peekChar(q)!=list->type)
+            push(&p,ptr,tollCost(ptr->type,item));
         ptr=ptr->next;
     }
     *pQ = p;
@@ -120,14 +125,17 @@ void pushAll(Building *list,Node **pQ,int item) {
 void pathing(List **roadMap, int item, char src, char dst) {
     int needItem=item;
     Node *pQ = NULL;
+    Queue *visitedNode = createQueue();
     Building *ptr = findNode(roadMap,src);
     Building *final = findNode(roadMap,dst);
-
     while(ptr!=final) {
-        pushAll(ptr,&pQ,needItem);
+        printf("Reach1\n");
+        enqueue(visitedNode,ptr->type);
+        pushAll(ptr,&pQ,needItem,visitedNode);
         ptr=findNode(roadMap,peek(pQ)->type);
         needItem=peekToll(pQ);
         pop(pQ);
+        displayAllQ(visitedNode);
     }
-    printf("needItem: %d\n",needItem);
+    printf("\nneedItem: %d\n",needItem);
 }

@@ -2,22 +2,20 @@
 #include <stdlib.h>
 
 
-typedef struct node{
+typedef struct Node_q{
     char type;
-    int val;
-    struct node *next;
-} Node;
+    struct Node_q *next;
+} NodeQ;
 
 typedef struct queue {
-    Node *first, *last;
+    NodeQ *first, *last;
 }Queue;
 
-Node *createNode(int x, char c) {
-    Node *newNode = (Node*)malloc(sizeof(Node));
-    newNode->type = c;
-    newNode->val = x;
-    newNode->next=NULL;
-    return newNode;
+NodeQ *createNodeQ(char c) {
+    NodeQ *newNodeQ = (NodeQ*)malloc(sizeof(NodeQ));
+    newNodeQ->type = c;
+    newNodeQ->next=NULL;
+    return newNodeQ;
 }
 
 Queue *createQueue() {
@@ -27,8 +25,8 @@ Queue *createQueue() {
     return newQueue;
 }
 
-void enqueue(Queue *q, int x, char c) {
-    Node *ptr=createNode(x,c);
+void enqueue(Queue *q, char c) {
+    NodeQ *ptr=createNodeQ(c);
     if(q->last == NULL) {
         q->first = q->last = ptr;
         return;
@@ -38,7 +36,7 @@ void enqueue(Queue *q, int x, char c) {
 }
 
 void dequeue(Queue *q) {
-    Node *temp;
+    NodeQ *temp;
     if(q->first==NULL && q->last==NULL) {
         printf("Queue Underflow\n");
         return;
@@ -49,7 +47,7 @@ void dequeue(Queue *q) {
     free(temp);
 }
 
-Node *getFront(Queue *q) {
+NodeQ *getFront(Queue *q) {
     if(q->first==NULL && q->last==NULL) {
         printf("Queue is empty\n");
         return NULL;
@@ -57,7 +55,7 @@ Node *getFront(Queue *q) {
     return q->first;
 }
 
-Node *getRear(Queue *q) {
+NodeQ *getRear(Queue *q) {
     if(q->first==NULL && q->last==NULL) {
         printf("Queue is empty\n");
         return NULL;
@@ -65,10 +63,14 @@ Node *getRear(Queue *q) {
     return q->last;
 }
 
-void displayAll(Queue *q) {
-    Node *ptr = q->first;
+char peekChar(Queue *q) {
+    return q->first->type;
+}
+
+void displayAllQ(Queue *q) {
+    NodeQ *ptr = q->first;
     while(ptr!=NULL) {
-        printf("[%d,%c] -> ",ptr->val,ptr->type);
+        printf("[%c] -> ",ptr->type);
         ptr=ptr->next;
     }
     printf("NULL\n");
