@@ -3,7 +3,6 @@
 #include <string.h>
 #include <ctype.h>
 #include "pQueue.h"
-#include "queue.h"
 
 typedef struct list {
     Building *head;
@@ -14,8 +13,6 @@ List **createRoadMap(int roads);
 
 void addNode(List *newList[],int s, int d, char *table);
 void pathing(List **roadMap, int item, char src, char dst);
-
-
 void display(List *newList[]);
 
 int main() {
@@ -24,7 +21,6 @@ int main() {
     scanf("%d",&input);
     List **firstMap = createRoadMap(input);
     display(firstMap);
-    printf("Reach\n");
     pathing(firstMap,39,'A','X');
     return 0;
 }
@@ -110,32 +106,44 @@ int tollCost(char c, int item) {
     return item+1;
 }
 
-void pushAll(Building *list,Node **pQ,int item,Queue *q) {
+int ifVisited(char *table, char c){
+    for(int i=0;i<strlen(table);i++) {
+        if(table[i]==c) {
+            return 1;}
+    }
+    return 0;
+}
+
+void pushAll(Building *list,Node **pQ,int item,char *c) {
     Building *ptr = list->next;
     Node *p = *pQ;
+    int i=0;
     while(ptr!=NULL) {
-        printf("Reach2\n");
-        if(peekChar(q)!=list->type)
+        if(ifVisited(c,ptr->type)==1) {
+            ptr=ptr->next;
+        } else {
+            i++;
             push(&p,ptr,tollCost(ptr->type,item));
-        ptr=ptr->next;
+            ptr=ptr->next;
+        }
     }
+    printf("%d\n",i);
     *pQ = p;
 }
 
 void pathing(List **roadMap, int item, char src, char dst) {
     int needItem=item;
     Node *pQ = NULL;
-    Queue *visitedNode = createQueue();
+    char visitedNode[256]="";
     Building *ptr = findNode(roadMap,src);
     Building *final = findNode(roadMap,dst);
     while(ptr!=final) {
-        printf("Reach1\n");
-        enqueue(visitedNode,ptr->type);
+        strncat(visitedNode,&(ptr->type),1);
         pushAll(ptr,&pQ,needItem,visitedNode);
+        printf("src: %c visitedNode: %s\n",ptr->type,visitedNode);
         ptr=findNode(roadMap,peek(pQ)->type);
         needItem=peekToll(pQ);
         pop(pQ);
-        displayAllQ(visitedNode);
     }
     printf("\nneedItem: %d\n",needItem);
 }

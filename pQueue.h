@@ -51,6 +51,7 @@ void push(Node **n, Building *b, int x) {
     }
     else {
         while(head->next!=NULL && head->next->toll < x) {
+            printf("reach\n");
             head=head->next;
         }
         temp->next = head->next;

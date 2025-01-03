@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "xmemory": "c",
+        "queue": "c"
+    }
+}
