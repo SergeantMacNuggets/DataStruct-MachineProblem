@@ -1,1 +1,3 @@
-sh(&pQ1,createBuilding('D'),1);
+if(peek(pQ)->type==final->type) {
+        //     break;
+        // }

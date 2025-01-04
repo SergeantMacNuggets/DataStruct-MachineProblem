@@ -21,7 +21,7 @@ int main() {
     scanf("%d",&input);
     List **firstMap = createRoadMap(input);
     display(firstMap);
-    pathing(firstMap,46,'a','F');
+    pathing(firstMap,24,'a','e');
     return 0;
 }
 
@@ -142,6 +142,9 @@ void pathing(List **roadMap, int item, char src, char dst) {
         pushAll(ptr,&pQ,needItem,visitedNode);
         ptr=findNode(roadMap,peek(pQ)->type);
         needItem=peekToll(pQ);
+        if(peek(pQ)->type==final->type) {
+            break;
+        }
         printf("pop: %c\n",peek(pQ)->type);
         pop(&pQ);
     }
