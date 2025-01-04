@@ -75,7 +75,6 @@ int main() {
             continue;
         }
         List **firstMap = createRoadMap(input);
-        // display(firstMap);
         getPath(&x,&src,&dst);
         if(head==NULL) {
             head = createCase(i,pathing(firstMap,x,src,dst));
@@ -188,11 +187,9 @@ void pushAll(Building *list,Node **pQ,int item,char *c) {
             ptr=ptr->next;
         } else {
             push(&(*pQ),ptr,tollCost(ptr->type,item));
-            // printf("src: %c pushed: %c tollCost: %d\n",list->type,ptr->type,tollCost(ptr->type,item));
             ptr=ptr->next;
         }
     }
-    // displayAll(pQ);
 }
 
 int pathing(List **roadMap, int item, char src, char dst) {
@@ -211,7 +208,6 @@ int pathing(List **roadMap, int item, char src, char dst) {
         if(peek(pQ)->type==final->type) {
             break;
         }
-        // printf("pop: %c\n",peek(pQ)->type);
         pop(&pQ);
     }
     return needItem;
