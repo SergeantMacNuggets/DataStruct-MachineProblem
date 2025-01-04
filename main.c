@@ -48,6 +48,10 @@ void getPath(int *x, char *src, char *dst) {
         if(input[i]==' ' && !flag) {
             strncpy(num,input,i);
             *x = atoi(num);
+            if(*x <= 0 || *x > 1000) {
+                printf("Input must be (0 < p <= 1000), Try Again!\n");
+                getPath(&(*x),&(*src),&(*dst));
+            }
             flag = 1;
             i++;
             break;
@@ -66,10 +70,13 @@ int main() {
         printf("Number of Roads: ");
         scanf("%d",&input);
         if(input == -1) break;
+        else if(input < 0 && input != -1) {
+            printf("Input must be (0 <= n), Try Again!\n");
+            continue;
+        }
         List **firstMap = createRoadMap(input);
         // display(firstMap);
         getPath(&x,&src,&dst);
-        // printf("x: %d, src: %c, dst: %c\n",x,src,dst);
         if(head==NULL) {
             head = createCase(i,pathing(firstMap,x,src,dst));
             tail=head;
