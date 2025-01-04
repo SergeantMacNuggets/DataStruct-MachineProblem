@@ -72,38 +72,3 @@ void displayAll(Node **q) {
     }
     printf("NULL\n");
 }
-
-void deleteByValue(Node *head, char value){
-    Node *temp = head, *prev; 
-    if (temp != NULL && temp->hut->type == value) { 
-        head = temp->next; // Changed head 
-        free(temp); // free old head 
-        return; 
-    } 
-  
-    while (temp != NULL && temp->hut->type != value) { 
-        prev = temp; 
-        temp = temp->next; 
-    } 
-  
-    if (temp == NULL) 
-        return; 
-  
-    prev->next = temp->next; 
-  
-    free(temp);
-}
-
-void update(Node **test, char c, int x) {
-    deleteByValue(*test, c);
-    push(test,createBuilding(c),x);
-}
-
-int ifExist(Node **p, char c,int item) {
-    while((*p)!=NULL) {
-        if((*p)->hut->type==c && item < (*p)->toll)
-            return 1;
-        *p=(*p)->next;
-    }
-    return 0;
-}

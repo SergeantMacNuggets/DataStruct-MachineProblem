@@ -11,17 +11,76 @@ typedef struct list {
 int len;
 List **createRoadMap(int roads);
 
+typedef struct caseOne {
+    int caseNum;
+    int totalToll;
+    struct caseOne *next;
+} Case;
+
 void addNode(List *newList[],int s, int d, char *table);
-void pathing(List **roadMap, int item, char src, char dst);
+int pathing(List **roadMap, int item, char src, char dst);
 void display(List *newList[]);
+
+Case *createCase(int num, int toll) {
+    Case *newCase = (Case*)malloc(sizeof(Case));
+    newCase->caseNum = num;
+    newCase->totalToll=toll;
+    newCase->next=NULL;
+    return newCase;
+}
+
+void displayCase(Case *head) {
+    Case *ptr = head;
+    while(ptr!=NULL) {
+        printf("Case %d: %d\n",ptr->caseNum,ptr->totalToll);
+        ptr=ptr->next;
+    }
+    printf("\n");
+}
+
+void getPath(int *x, char *src, char *dst) {
+    char input[256];
+    char num[256]="";
+    int flag=0,i;
+    printf("Path (toll, src, dest): ");
+    fgets(input, sizeof(input),stdin);
+    for(i=0;i<strlen(input);i++) {
+        if(input[i]==' ' && !flag) {
+            strncpy(num,input,i);
+            *x = atoi(num);
+            flag = 1;
+            i++;
+            break;
+        }
+    }
+    *src = input[i];
+    *dst = input[i+2];
+}
 
 int main() {
     int input;
-    printf("Number of Roads: ");
-    scanf("%d",&input);
-    List **firstMap = createRoadMap(input);
-    display(firstMap);
-    pathing(firstMap,24,'a','e');
+    int i=1,x;
+    char src, dst;
+    Case *head = NULL, *ptr=NULL, *tail=NULL;
+    while(1) {
+        printf("Number of Roads: ");
+        scanf("%d",&input);
+        if(input == -1) break;
+        List **firstMap = createRoadMap(input);
+        // display(firstMap);
+        getPath(&x,&src,&dst);
+        // printf("x: %d, src: %c, dst: %c\n",x,src,dst);
+        if(head==NULL) {
+            head = createCase(i,pathing(firstMap,x,src,dst));
+            tail=head;
+        } else {
+            ptr = createCase(i,pathing(firstMap,x,src,dst));
+            tail->next=ptr;
+            tail=ptr;
+        }
+        i++;
+    }
+    displayCase(head);
     return 0;
 }
 
@@ -122,14 +181,14 @@ void pushAll(Building *list,Node **pQ,int item,char *c) {
             ptr=ptr->next;
         } else {
             push(&(*pQ),ptr,tollCost(ptr->type,item));
-            printf("src: %c pushed: %c tollCost: %d\n",list->type,ptr->type,tollCost(ptr->type,item));
+            // printf("src: %c pushed: %c tollCost: %d\n",list->type,ptr->type,tollCost(ptr->type,item));
             ptr=ptr->next;
         }
     }
-    displayAll(pQ);
+    // displayAll(pQ);
 }
 
-void pathing(List **roadMap, int item, char src, char dst) {
+int pathing(List **roadMap, int item, char src, char dst) {
     int needItem=item;
     Node *pQ = NULL;
     char visitedNode[256]="";
@@ -138,15 +197,15 @@ void pathing(List **roadMap, int item, char src, char dst) {
     Node *test = NULL;
     while(ptr!=final) {
         strncat(visitedNode,&(ptr->type),1);
-        printf("visitedNode: %s\n",visitedNode);
+        // printf("visitedNode: %s\n",visitedNode);
         pushAll(ptr,&pQ,needItem,visitedNode);
         ptr=findNode(roadMap,peek(pQ)->type);
         needItem=peekToll(pQ);
         if(peek(pQ)->type==final->type) {
             break;
         }
-        printf("pop: %c\n",peek(pQ)->type);
+        // printf("pop: %c\n",peek(pQ)->type);
         pop(&pQ);
     }
-    printf("\nneedItem: %d\n",needItem);
+    return needItem;
 }
