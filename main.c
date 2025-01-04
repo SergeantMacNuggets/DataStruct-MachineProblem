@@ -109,38 +109,24 @@ int tollCost(char c, int item) {
 int ifVisited(char *table, char c){
     for(int i=0;i<strlen(table);i++) {
         if(table[i]==c) {
-            return 1;}
+            return 1;
+        }
     }
     return 0;
 }
 
 void pushAll(Building *list,Node **pQ,int item,char *c) {
     Building *ptr = list->next;
-    Node *p = *pQ;
     while(ptr!=NULL) {
-        
         if(ifVisited(c,ptr->type)==1) {
             ptr=ptr->next;
         } else {
-            push(&p,ptr,tollCost(ptr->type,item));
+            push(&(*pQ),ptr,tollCost(ptr->type,item));
             printf("src: %c pushed: %c tollCost: %d\n",list->type,ptr->type,tollCost(ptr->type,item));
             ptr=ptr->next;
         }
     }
-    *pQ = p;
-}
-
-void visitedNodes(Building *l, char *c,char peek) {
-    Building *ptr = l->next;
-    while(ptr!=NULL) {
-        if(ptr->type==peek) {
-            ptr=ptr->next;
-        }
-        else {
-            strncat(c,&(ptr->type),1);
-            ptr=ptr->next;
-        }
-    }
+    displayAll(pQ);
 }
 
 void pathing(List **roadMap, int item, char src, char dst) {
@@ -149,14 +135,15 @@ void pathing(List **roadMap, int item, char src, char dst) {
     char visitedNode[256]="";
     Building *ptr = findNode(roadMap,src);
     Building *final = findNode(roadMap,dst);
+    Node *test = NULL;
     while(ptr!=final) {
         strncat(visitedNode,&(ptr->type),1);
-        pushAll(ptr,&pQ,needItem,visitedNode);
-        visitedNodes(ptr,visitedNode,peek(pQ)->type);
         printf("visitedNode: %s\n",visitedNode);
+        pushAll(ptr,&pQ,needItem,visitedNode);
         ptr=findNode(roadMap,peek(pQ)->type);
         needItem=peekToll(pQ);
-        pop(pQ);
+        printf("pop: %c\n",peek(pQ)->type);
+        pop(&pQ);
     }
     printf("\nneedItem: %d\n",needItem);
 }
