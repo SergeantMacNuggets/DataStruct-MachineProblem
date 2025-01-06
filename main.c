@@ -201,7 +201,6 @@ int pathing(List **roadMap, int item, char src, char dst) {
     Node *test = NULL;
     while(ptr!=final) {
         strncat(visitedNode,&(ptr->type),1);
-        // printf("visitedNode: %s\n",visitedNode);
         pushAll(ptr,&pQ,needItem,visitedNode);
         ptr=findNode(roadMap,peek(pQ)->type);
         needItem=peekToll(pQ);
