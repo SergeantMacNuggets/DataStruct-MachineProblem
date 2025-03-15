@@ -49,26 +49,34 @@ void push(Node **n, Building *b, int x) {
         temp->next = *n;
         *n=temp;
     }
+
     else {
+
         while(head->next!=NULL && head->next->toll < x) {
             head=head->next;
         }
+
         temp->next = head->next;
         head->next = temp;
+
     }
 }
 
 void pop(Node **n) {
+
     Node *temp = *n;
     *n = (*n)->next;
     free(temp);
+
 }
 
 void displayAll(Node **q) {
     Node *ptr = *q;
-    while(ptr!=NULL && ptr->next!=NULL) {
+
+    while(ptr!=NULL) {
         printf("[%d,%c] -> ",ptr->toll,ptr->hut->type);
         ptr=ptr->next;
     }
+    
     printf("NULL\n");
 }
